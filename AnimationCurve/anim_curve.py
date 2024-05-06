@@ -21,11 +21,18 @@ from bpy_extras.io_utils import ImportHelper,ExportHelper
 from bpy.props import StringProperty, BoolProperty
 
 
-
-# Get the current blender file's location
-blender_file = bpy.data.filepath
-ROOT_DIR = os.path.dirname(blender_file)
-
+def get_project_dir():
+    """
+    Get the current blender file's direcotry
+    """
+    try: 
+        if bpy.data.is_saved:
+            blender_file = bpy.data.filepath
+            return os.path.dirname(blender_file)
+        else:
+            return ''
+    except:
+        return ''
 
 def validate_selection(context):
     """
@@ -271,7 +278,7 @@ class AC_OT_export_animation_curve(bpy.types.Operator, ExportHelper):
     )  # type: ignore 
 
     directory: StringProperty(
-        default=ROOT_DIR, 
+        default=get_project_dir(), 
         options={'HIDDEN'}
     ) # type: ignore 
 
@@ -345,7 +352,7 @@ class AC_OT_load_animation_curve(bpy.types.Operator, ImportHelper):
 
 
     directory: StringProperty(
-        default=ROOT_DIR, 
+        default=get_project_dir(), 
         options={'HIDDEN'}
         ) # type: ignore
 
